@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import Product from "../product/Product"
+import { addToLocalStorage, getStoredCart } from "../utilities/localStorage"
 
 const Products = () => {
 
@@ -12,10 +13,24 @@ const Products = () => {
         .then(data=> setProducts(data.products))
     },[])
 
+    useEffect(()=>{
+        if(products.length>0){
+            const storedCart = getStoredCart();
+            const savedCart = [];
+            for(const id of storedCart){
+                const product = products.find(product => product.id === id)
+                if(product){
+                    savedCart.push(product)
+                }
+            }
+            setCart(savedCart);
+        }
+    }, [products])
+
     const handleAddToCart = product =>{
         const newCart = [...cart, product]
         setCart(newCart);
-
+        addToLocalStorage(product.id);
     }
 
   return (
