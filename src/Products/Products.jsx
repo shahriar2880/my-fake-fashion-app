@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import Product from "../product/Product"
-import { addToLocalStorage, getStoredCart } from "../utilities/localStorage"
+import { addToLocalStorage, getStoredCart, removeFromLS } from "../utilities/localStorage"
+import Cart from "../cart/Cart"
 
 const Products = () => {
 
@@ -33,10 +34,14 @@ const Products = () => {
         addToLocalStorage(product.id);
     }
 
+    const handleRemoveFromCart = id =>{
+        removeFromLS(id);
+    }
+
   return (
     <div className="">
       <h1>Products:{products.length}</h1>
-      <h2>Cart:{cart.length}</h2>
+      <Cart cart={cart} handleRemoveFromCart={handleRemoveFromCart}/>
       <div className="grid grid-cols-3 gap-3">
       {
         products.map(product => <Product key={product.id} handleAddToCart={handleAddToCart} product={product}></Product>)
